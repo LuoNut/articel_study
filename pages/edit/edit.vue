@@ -10,6 +10,12 @@
 			<view class="item">
 				<textarea v-model="formValue.content" name="content" placeholder="" placeholder="请输入内容" />
 			</view>
+			<uni-file-picker
+				v-model="imageValue" 
+				fileMediatype="image" 
+				mode="grid"  
+				@success="uploadSuccess" 
+			/>
 			<view class="item">
 				<button form-type="reset">重置</button>
 				<button form-type="submit" type="primary" :disabled="isDisable(formValue)">提交</button>
@@ -22,6 +28,8 @@
 	export default {
 		data() {
 			return {
+				imageValue: [],
+				picUrls: [],
 				id: '',
 				formValue: {
 					title: "",
@@ -35,6 +43,13 @@
 			this.getArtData()
 		},
 		methods: {
+			//图片修改上传成功
+			uploadSuccess() {
+				this.picUrls = this.imageValue.map((item) => {
+					return item.url
+				})
+				
+			},
 			//获取需要修改的文章数据
 			getArtData() {
 				uniCloud.callFunction({
@@ -44,6 +59,10 @@
 					}
 				}).then((res) => {
 					this.formValue = res.result.data[0]
+					if(!res.result.data[0].picUrl) return
+					this.imageValue = res.result.data[0].picUrl.map(item => {
+						return {url: item}
+					})
 				})
 			},
 			//前端表单验证
@@ -60,11 +79,13 @@
 					name: 'art_updata_row',
 					data:
 					{
-						value:this.formValue
+						value:this.formValue,
+						picUrl: this.picUrls
 					}
 				}).then((res) => {
 					uni.showToast({
-						title: "修改成功"
+						title: "修改成功",
+						mask:true
 					})
 					setTimeout(() => {
 						uni.navigateBack()

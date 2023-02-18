@@ -12,7 +12,8 @@
 					</view>
 				</view>
 				<view class="pic">
-					<image src="/static/image/mmexport1658408767749.jpg" mode="aspectFill"></image>
+					<image v-if="item.picUrl && item.picUrl.length" :src="item.picUrl[0]" mode="aspectFill"></image>
+					<image v-else src="/static/image/mmexport1658408767749.jpg" mode="aspectFill"></image>
 				</view>
 			</view>
 		</view>

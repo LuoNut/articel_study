@@ -11,6 +11,9 @@
 			<view class="content">
 				{{detailData.content}}
 			</view>
+			<view class="img">
+				<image :src="item" v-for="item in detailData.picUrl" mode="widthFix"></image>
+			</view>
 			<view class="btn">
 				<button size="mini" @click="toEdit" >修改</button>
 				<button size="mini" type="warn" @click="onRemove" >删除</button>
@@ -105,6 +108,14 @@
 	.container {
 		padding: 20rpx;
 		text-align: justify;
+		.img {
+			padding-top: 30rpx;
+			image {
+				width: 100%;
+				display: block;
+				margin-bottom: 10rpx;
+			}
+		}
 		.title {
 			font-size: 50rpx;
 		}

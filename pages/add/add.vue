@@ -10,6 +10,12 @@
 			<view class="item">
 				<textarea v-model="formValue.content" name="content" placeholder="" placeholder="请输入内容" />
 			</view>
+			<uni-file-picker 
+				v-model="imageValue" 
+				fileMediatype="image" 
+				mode="grid"  
+				@success="uploadSuccess" 
+			/>
 			<view class="item">
 				<button form-type="reset">重置</button>
 				<button form-type="submit" type="primary" :disabled="isDisable(formValue)">提交</button>
@@ -22,6 +28,8 @@
 	export default {
 		data() {
 			return {
+				imageValue:[],
+				picUrls: [],
 				formValue: {
 					title: "",
 					author: "",
@@ -31,6 +39,11 @@
 		},
 
 		methods: {
+			//图片上传成功
+			uploadSuccess(e) {
+				this.picUrls = e.tempFilePaths
+			},
+			
 			//前端表单验证
 			isDisable(obj) {
 				for (let key in obj) {
@@ -41,13 +54,13 @@
 			},
 			//提交表单
 			onSubmit(e) {
-				
 				let value = e.detail.value
 				uniCloud.callFunction({
 					name: 'art_add_row',
 					data:
 					{
-						value
+						value,
+						picUrl: this.picUrls
 					}
 				}).then((res) => {
 					uni.showToast({
