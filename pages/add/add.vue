@@ -46,11 +46,18 @@
 			
 			//前端表单验证
 			isDisable(obj) {
-				for (let key in obj) {
-					if (!obj[key]) {
-						return true
-					}
-				}
+				//app不支持
+				// for (let key in obj) {
+				// 	if (!obj[key]) {
+				// 		return true
+				// 	}
+				// }
+				
+				let bool = Object.keys(obj).some((key, value) => {
+					return obj[key] === ""
+				})
+				return bool
+				
 			},
 			//提交表单
 			onSubmit(e) {
